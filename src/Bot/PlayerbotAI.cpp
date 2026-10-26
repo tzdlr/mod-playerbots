@@ -20,6 +20,7 @@
 #include "ExternalEventHelper.h"
 #include "GameObjectData.h"
 #include "GameTime.h"
+#include "Group.h"
 #include "GuildMgr.h"
 #include "LFGMgr.h"
 #include "LastMovementValue.h"
@@ -3118,6 +3119,17 @@ bool PlayerbotAI::TellMasterNoFacing(std::string const text, PlayerbotSecurityLe
     if (!lastSaid || (time(nullptr) - lastSaid) >= sPlayerbotAIConfig.RepeatDelay / 1000)
     {
         whispers[text] = time(nullptr);
+
+        Group* group = bot->GetGroup();
+        if (sPlayerbotAIConfig.TellMasterInGroupChat && group && group->IsMember(master->GetGUID()))
+        {
+            if (group->isRaidGroup())
+                SayToRaid(text);
+            else
+                SayToParty(text);
+
+            return true;
+        }
 
         ChatMsg type = CHAT_MSG_WHISPER;
         if (currentChat.second - time(nullptr) >= 1)

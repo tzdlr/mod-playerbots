@@ -300,6 +300,7 @@ bool PlayerbotAIConfig::Initialize()
     RandomBotEmote = sConfigMgr->GetOption<bool>("Playerbots.RandomBotEmote", false);
     RandomBotSuggestDungeons = sConfigMgr->GetOption<bool>("Playerbots.RandomBotSuggestDungeons", true);
     RandomBotSayWithoutMaster = sConfigMgr->GetOption<bool>("Playerbots.RandomBotSayWithoutMaster", false);
+    TellMasterInGroupChat = sConfigMgr->GetOption<bool>("Playerbots.TellMasterInGroupChat", false);
     AnnounceConsumableUse = sConfigMgr->GetOption<bool>("Playerbots.AnnounceConsumableUse", true);
 
     // broadcastChanceMaxValue is used in urand(1, broadcastChanceMaxValue) for broadcasts,

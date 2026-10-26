@@ -190,6 +190,7 @@ public:
     bool EnableBroadcasts;
     bool EnableGreet;
     bool RandomBotSayWithoutMaster;
+    bool TellMasterInGroupChat;
     bool AnnounceConsumableUse;
 
     uint32 BroadcastChanceMaxValue;
