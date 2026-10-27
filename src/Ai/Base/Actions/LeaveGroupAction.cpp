@@ -6,6 +6,7 @@
 
 #include "LeaveGroupAction.h"
 #include "Event.h"
+#include "Group.h"
 #include "PlayerbotAIConfig.h"
 #include "PlayerbotTextMgr.h"
 #include "Playerbots.h"
@@ -86,7 +87,9 @@ bool LeaveGroupAction::Leave()
         return false;
 
     Player* master = botAI -> GetMaster();
-    if (master)
+    Group* group = bot->GetGroup();
+    bool const masterInGroup = master && group && group->IsMember(master->GetGUID());
+    if (master && (!sPlayerbotAIConfig.TellMasterInGroupChat || masterInGroup))
         botAI->TellMaster(
             PlayerbotTextMgr::instance().GetBotTextOrDefault("goodbye", "Goodbye!", {}),
             PLAYERBOT_SECURITY_TALK);
