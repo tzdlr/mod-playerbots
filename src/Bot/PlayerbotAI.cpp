@@ -1147,7 +1147,7 @@ void PlayerbotAI::HandleCommand(uint32 type, std::string const text, Player* fro
             {
                 std::string message = PlayerbotTextMgr::instance().GetBotTextOrDefault(
                     "bot_not_your_master", "You are not my master!", {});
-                Whisper(message, LANG_UNIVERSAL, &fromPlayer);
+                Whisper(message, LANG_UNIVERSAL, fromPlayer);
             }
             return;
         }
