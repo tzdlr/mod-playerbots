@@ -10,6 +10,7 @@
 #include "GuildTaskMgr.h"
 #include "ItemUsageValue.h"
 #include "ItemVisitors.h"
+#include "PlayerbotAI.h"
 #include "PlayerbotMgr.h"
 #include "PlayerbotSecurity.h"
 #include "PlayerbotTextMgr.h"
@@ -37,7 +38,7 @@ bool TradeStatusAction::Execute(Event event)
     if (trader != master && traderIsGameClientPlayer &&
         (!bot->GetGroup() || !bot->GetGroup()->IsMember(trader->GetGUID())))
     {
-        bot->Whisper(PlayerbotTextMgr::instance().GetBotTextOrDefault(
+        botAI->Whisper(PlayerbotTextMgr::instance().GetBotTextOrDefault(
                          "trade_busy_now", "I'm kind of busy now", {}),
                      LANG_UNIVERSAL, trader);
         CancelTrade();
@@ -47,7 +48,7 @@ bool TradeStatusAction::Execute(Event event)
     if (sPlayerbotAIConfig.EnableRandomBotTrading == 0 &&
         (sRandomPlayerbotMgr.IsRandomBot(bot)|| sRandomPlayerbotMgr.IsAddclassBot(bot)))
     {
-        bot->Whisper(PlayerbotTextMgr::instance().GetBotTextOrDefault(
+        botAI->Whisper(PlayerbotTextMgr::instance().GetBotTextOrDefault(
                          "trade_disabled", "Trading is disabled", {}),
                      LANG_UNIVERSAL, trader);
         CancelTrade();
@@ -235,7 +236,7 @@ bool TradeStatusAction::CheckTrade()
     if (botItemsMoney > 0 && sPlayerbotAIConfig.EnableRandomBotTrading == 2 &&
         (sRandomPlayerbotMgr.IsRandomBot(bot)|| sRandomPlayerbotMgr.IsAddclassBot(bot)))
     {
-        bot->Whisper(PlayerbotTextMgr::instance().GetBotTextOrDefault(
+        botAI->Whisper(PlayerbotTextMgr::instance().GetBotTextOrDefault(
                          "trade_selling_disabled", "Selling is disabled.", {}),
                      LANG_UNIVERSAL, trader);
         return false;
@@ -243,7 +244,7 @@ bool TradeStatusAction::CheckTrade()
     if (playerItemsMoney && sPlayerbotAIConfig.EnableRandomBotTrading == 3 &&
         (sRandomPlayerbotMgr.IsRandomBot(bot)|| sRandomPlayerbotMgr.IsAddclassBot(bot)))
     {
-        bot->Whisper(PlayerbotTextMgr::instance().GetBotTextOrDefault(
+        botAI->Whisper(PlayerbotTextMgr::instance().GetBotTextOrDefault(
                          "trade_buying_disabled", "Buying is disabled.", {}),
                      LANG_UNIVERSAL, trader);
         return false;

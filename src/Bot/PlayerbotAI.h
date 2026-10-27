@@ -21,6 +21,7 @@
 #include "PlayerbotAIConfig.h"
 #include "PlayerbotSecurity.h"
 #include "PlayerbotTextMgr.h"
+#include "SharedDefines.h"
 #include "SpellAuras.h"
 #include "Util.h"
 #include "WorldPacket.h"
@@ -494,6 +495,7 @@ public:
     bool Yell(std::string const& msg);
     bool Say(std::string const& msg);
     bool Whisper(std::string const& msg, std::string const& receiverName);
+    bool Whisper(std::string const& msg, Language language, Player* receiver);
 
     void SpellInterrupted(uint32 spellid);
     int32 CalculateGlobalCooldown(uint32 spellid);

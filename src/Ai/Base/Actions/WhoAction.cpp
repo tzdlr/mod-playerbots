@@ -8,6 +8,7 @@
 #include "AiFactory.h"
 #include "Event.h"
 #include "ItemVisitors.h"
+#include "PlayerbotAI.h"
 #include "Playerbots.h"
 
 #ifndef WIN32
@@ -62,7 +63,7 @@ bool WhoAction::Execute(Event event)
         return false;
 
     // ignore random bot chat filter
-    bot->Whisper(tell, LANG_UNIVERSAL, owner);
+    botAI->Whisper(tell, LANG_UNIVERSAL, owner);
     return true;
 }
 

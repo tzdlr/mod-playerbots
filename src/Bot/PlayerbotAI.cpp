@@ -1147,7 +1147,7 @@ void PlayerbotAI::HandleCommand(uint32 type, std::string const text, Player* fro
             {
                 std::string message = PlayerbotTextMgr::instance().GetBotTextOrDefault(
                     "bot_not_your_master", "You are not my master!", {});
-                bot->Whisper(message, LANG_UNIVERSAL, fromPlayer);
+                Whisper(message, LANG_UNIVERSAL, &fromPlayer);
             }
             return;
         }
@@ -3080,14 +3080,28 @@ bool PlayerbotAI::Whisper(std::string const& msg, std::string const& receiverNam
         return false;
     }
 
+    Language language;
     if (bot->GetTeamId() == TeamId::TEAM_ALLIANCE)
-    {
-        bot->Whisper(msg, LANG_COMMON, receiver);
-    }
+        language = LANG_COMMON;
     else
+        language = LANG_ORCISH;
+
+    return Whisper(msg, language, receiver);
+}
+
+bool PlayerbotAI::Whisper(std::string const& msg, Language language, Player* receiver)
+{
+    if (!receiver)
+        return false;
+
+    Group* group = bot->GetGroup();
+    if (sPlayerbotAIConfig.TellMasterInGroupChat && receiver == GetMaster() && group &&
+        group->IsMember(receiver->GetGUID()))
     {
-        bot->Whisper(msg, LANG_ORCISH, receiver);
+        return group->isRaidGroup() ? SayToRaid(msg) : SayToParty(msg);
     }
+
+    bot->Whisper(msg, language, receiver);
 
     return true;
 }
@@ -3123,11 +3137,7 @@ bool PlayerbotAI::TellMasterNoFacing(std::string const text, PlayerbotSecurityLe
         Group* group = bot->GetGroup();
         if (sPlayerbotAIConfig.TellMasterInGroupChat && group && group->IsMember(master->GetGUID()))
         {
-            if (group->isRaidGroup())
-                SayToRaid(text);
-            else
-                SayToParty(text);
-
+            Whisper(text, LANG_UNIVERSAL, master);
             return true;
         }
 

@@ -2610,8 +2610,8 @@ Playerbots.ThunderfuryRepliesChance = 40
 Playerbots.GuildRepliesRate = 100
 # Bots without a master will say their lines
 Playerbots.RandomBotSayWithoutMaster = 0
-# Send bot replies to their master's party or raid chat while they are in the same group.
-# Outside the master's group, replies remain whispers. This may make bots quite chatty.
+# Send bot messages addressed to their master to party or raid chat while they share a group.
+# Messages to other players remain whispers. This may make bots quite chatty.
 # Default: 0 (disabled)
 Playerbots.TellMasterInGroupChat = 0
 # Bots whisper their master when they eat/drink/feast ("Eating [item] (85%)"). Set to 0 to

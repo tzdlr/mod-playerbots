@@ -58,7 +58,7 @@ bool TellPvpStatsAction::Execute(Event event)
         "[PVP] Arena points: %arena_points | Honor Points: %honor_points",
         currencyPlaceholders);
 
-    bot->Whisper(currencyText, LANG_UNIVERSAL, requester);
+    botAI->Whisper(currencyText, LANG_UNIVERSAL, requester);
 
     // Arena Teams by slot
     bool anyTeam = false;
@@ -81,7 +81,7 @@ bool TellPvpStatsAction::Execute(Event event)
                 "[PVP] %bracket: <%team_name> (rating %team_rating)",
                 placeholders);
 
-            bot->Whisper(teamText, LANG_UNIVERSAL, requester);
+            botAI->Whisper(teamText, LANG_UNIVERSAL, requester);
         }
     }
 
@@ -92,7 +92,7 @@ bool TellPvpStatsAction::Execute(Event event)
             "[PVP] I have no Arena Team.",
             std::map<std::string, std::string>());
 
-        bot->Whisper(noTeamText, LANG_UNIVERSAL, requester);
+        botAI->Whisper(noTeamText, LANG_UNIVERSAL, requester);
     }
 
     return true;

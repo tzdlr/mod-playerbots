@@ -6,6 +6,7 @@
 
 #include "PlayerbotSecurity.h"
 #include "LFGMgr.h"
+#include "PlayerbotAI.h"
 #include "PlayerbotAIConfig.h"
 #include "Playerbots.h"
 
@@ -288,7 +289,7 @@ bool PlayerbotSecurity::CheckLevelFor(PlayerbotSecurityLevel level, bool silent,
 
         // Additional protection against crashes during logout
         if (bot->IsInWorld() && from->IsInWorld())
-            bot->Whisper(text, LANG_UNIVERSAL, from);
+            botAI->Whisper(text, LANG_UNIVERSAL, from);
     }
 
     return false;

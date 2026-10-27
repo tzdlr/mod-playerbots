@@ -9,6 +9,7 @@
 #include "Event.h"
 #include "ItemUsageValue.h"
 #include "ItemVisitors.h"
+#include "PlayerbotAI.h"
 #include "Playerbots.h"
 
 bool WtsAction::Execute(Event event)
@@ -53,7 +54,7 @@ bool WtsAction::Execute(Event event)
         tell << "I'll buy " << chat->FormatItem(proto) << " for " << chat->formatMoney(buyPrice);
 
         // ignore random bot chat filter
-        bot->Whisper(tell.str(), LANG_UNIVERSAL, owner);
+        botAI->Whisper(tell.str(), LANG_UNIVERSAL, owner);
     }
 
     return true;
