@@ -588,8 +588,11 @@ void PlayerbotHolder::OnBotLogin(Player* const bot)
     // set delay on login
     botAI->SetNextCheckDelay(urand(2000, 4000));
 
-    botAI->TellMaster(PlayerbotTextMgr::instance().GetBotTextOrDefault(
-        "hello", "Hello!", {}), PLAYERBOT_SECURITY_TALK);
+    bool const deferLoginGreeting = sPlayerbotAIConfig.TellMasterInGroupChat && master &&
+                                    (!group || !group->IsMember(master->GetGUID()));
+    if (!deferLoginGreeting)
+        botAI->TellMaster(PlayerbotTextMgr::instance().GetBotTextOrDefault(
+            "hello", "Hello!", {}), PLAYERBOT_SECURITY_TALK);
 
     // Queue group operations for world thread
     if (master && master->GetGroup() && !group)
@@ -605,21 +608,24 @@ void PlayerbotHolder::OnBotLogin(Player* const bot)
             if (mgroup->isRaidGroup() || (!mgroup->isLFGGroup() && !mgroup->isBGGroup() && !mgroup->isBFGroup()))
             {
                 // Queue AddMember operation; Execute() converts the party to a raid before adding.
-                auto addOp = std::make_unique<GroupInviteOperation>(master->GetGUID(), bot->GetGUID());
+                auto addOp = std::make_unique<GroupInviteOperation>(master->GetGUID(), bot->GetGUID(),
+                                                                    deferLoginGreeting);
                 PlayerbotWorldThreadProcessor::instance().QueueOperation(std::move(addOp));
             }
         }
         else
         {
             // Queue AddMember operation
-            auto addOp = std::make_unique<GroupInviteOperation>(master->GetGUID(), bot->GetGUID());
+            auto addOp = std::make_unique<GroupInviteOperation>(master->GetGUID(), bot->GetGUID(),
+                                                                deferLoginGreeting);
             PlayerbotWorldThreadProcessor::instance().QueueOperation(std::move(addOp));
         }
     }
     else if (master && !group)
     {
         // Queue group creation and AddMember operation
-        auto inviteOp = std::make_unique<GroupInviteOperation>(master->GetGUID(), bot->GetGUID());
+        auto inviteOp = std::make_unique<GroupInviteOperation>(master->GetGUID(), bot->GetGUID(),
+                                                               deferLoginGreeting);
         PlayerbotWorldThreadProcessor::instance().QueueOperation(std::move(inviteOp));
     }
     // if (master)

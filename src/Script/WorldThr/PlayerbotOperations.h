@@ -17,6 +17,7 @@
 #include "PlayerbotMgr.h"
 #include "PlayerbotOperation.h"
 #include "PlayerbotRepository.h"
+#include "PlayerbotTextMgr.h"
 #include "Playerbots.h"
 #include "RandomPlayerbotFactory.h"
 #include "RandomPlayerbotMgr.h"
@@ -28,8 +29,8 @@
 class GroupInviteOperation : public PlayerbotOperation
 {
 public:
-    GroupInviteOperation(ObjectGuid botGuid, ObjectGuid targetGuid)
-        : m_botGuid(botGuid), m_targetGuid(targetGuid)
+    GroupInviteOperation(ObjectGuid botGuid, ObjectGuid targetGuid, bool sendLoginGreeting = false)
+        : m_botGuid(botGuid), m_targetGuid(targetGuid), _sendLoginGreeting(sendLoginGreeting)
     {
     }
 
@@ -78,6 +79,14 @@ public:
         if (group->AddMember(target))
         {
             LOG_DEBUG("playerbots", "GroupInviteOperation: Successfully added {} to group", target->GetName());
+            if (_sendLoginGreeting)
+            {
+                PlayerbotAI* targetAI = sPlayerbotsMgr.GetPlayerbotAI(target);
+                if (targetAI && targetAI->GetMaster() == bot)
+                    targetAI->TellMaster(PlayerbotTextMgr::instance().GetBotTextOrDefault(
+                        "hello", "Hello!", {}), PLAYERBOT_SECURITY_TALK);
+            }
+
             if (sPlayerbotAIConfig.SummonWhenGroup && target->GetDistance(bot) > sPlayerbotAIConfig.SightDistance)
             {
                 PlayerbotAI* targetAI = sPlayerbotsMgr.GetPlayerbotAI(target);
@@ -113,6 +122,7 @@ public:
 private:
     ObjectGuid m_botGuid;
     ObjectGuid m_targetGuid;
+    bool _sendLoginGreeting;
 };
 
 // Remove member from group
